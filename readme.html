@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>X-Scraper 使用说明</title>
+    <meta name="keywords" content="X-Scraper,公众号采集,公众号助手,公众号运营,数据采集">
+    <meta name="description" content="X-Scraper 本地化微信公众号采集助手使用说明，包含启动、全局设置、公众号管理、关键词采集、文章管理和任务管理。">
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --ink: #172033;
+            --muted: #667085;
+            --line: #d9e2ef;
+            --brand: #1769aa;
+            --brand-deep: #0f4e82;
+            --accent: #12a594;
+            --warning: #f59e0b;
+            --soft-blue: #ecf6ff;
+            --soft-green: #eaf8f5;
+            --shadow: 0 18px 48px rgba(23, 32, 51, .10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+            line-height: 1.75;
+            background:
+                linear-gradient(135deg, rgba(23, 105, 170, .10), transparent 34rem),
+                linear-gradient(315deg, rgba(18, 165, 148, .12), transparent 30rem),
+                var(--bg);
+        }
+
+        a {
+            color: var(--brand);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--brand-deep);
+            text-decoration: underline;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 10px 28px rgba(23, 32, 51, .08);
+        }
+
+        figure {
+            margin: 0;
+        }
+
+        .image-link {
+            display: block;
+            position: relative;
+            border-radius: 8px;
+            outline: 0;
+        }
+
+        .image-link::after {
+            content: "点击查看原图";
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            padding: 5px 10px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            background: rgba(15, 78, 130, .88);
+            border-radius: 999px;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity .18s ease, transform .18s ease;
+        }
+
+        .image-link:hover {
+            text-decoration: none;
+        }
+
+        .image-link:hover::after,
+        .image-link:focus-visible::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-link:hover img,
+        .image-link:focus-visible img {
+            border-color: #9cc8ec;
+            box-shadow: 0 16px 38px rgba(23, 105, 170, .18);
+        }
+
+        .page {
+            width: min(1160px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 40px 0 64px;
+        }
+
+        .hero,
+        .toc,
+        .section,
+        .note {
+            background: rgba(255, 255, 255, .94);
+            border: 1px solid rgba(217, 226, 239, .92);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+            gap: 28px;
+            align-items: stretch;
+            padding: 44px;
+        }
+
+        .eyebrow {
+            width: fit-content;
+            margin: 0 0 14px;
+            padding: 4px 10px;
+            color: var(--brand-deep);
+            font-size: 13px;
+            font-weight: 800;
+            background: var(--soft-blue);
+            border: 1px solid #cce2f6;
+            border-radius: 999px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin: 0;
+            line-height: 1.25;
+            letter-spacing: 0;
+        }
+
+        h1 {
+            font-size: clamp(34px, 5.8vw, 60px);
+        }
+
+        h2 {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+            font-size: 25px;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        p {
+            margin: 0 0 14px;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .lead {
+            max-width: 700px;
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .hero-card {
+            align-self: center;
+            padding: 24px;
+            background: #f8fbff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .meta-list {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .meta-row {
+            display: grid;
+            grid-template-columns: 88px minmax(0, 1fr);
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .meta-row:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .meta-row dt {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .meta-row dd {
+            margin: 0;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .toc {
+            margin-top: 22px;
+            padding: 22px 24px;
+        }
+
+        .toc-title {
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .toc-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toc-links a {
+            padding: 7px 12px;
+            color: var(--brand-deep);
+            font-weight: 700;
+            background: var(--soft-blue);
+            border: 1px solid #cce2f6;
+            border-radius: 999px;
+        }
+
+        .section {
+            margin-top: 22px;
+            padding: 32px;
+        }
+
+        .section-number {
+            display: inline-grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            flex: 0 0 auto;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 800;
+            background: var(--brand);
+            border-radius: 50%;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, .88fr) minmax(360px, 1.12fr);
+            gap: 28px;
+            align-items: start;
+        }
+
+        .text-block {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding: 14px 16px 14px 42px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .feature-list li::before {
+            content: "";
+            position: absolute;
+            top: 21px;
+            left: 18px;
+            width: 9px;
+            height: 9px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(18, 165, 148, .14);
+        }
+
+        .shot-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .shot-grid.two {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .caption {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .caption-text {
+            min-width: 0;
+        }
+
+        .image-action {
+            flex: 0 0 auto;
+            color: var(--brand-deep);
+            font-weight: 800;
+        }
+
+        .note {
+            margin-top: 22px;
+            padding: 22px 24px;
+            border-left: 5px solid var(--warning);
+        }
+
+        code {
+            padding: 2px 6px;
+            color: var(--brand-deep);
+            background: var(--soft-blue);
+            border-radius: 4px;
+            font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+            font-size: .94em;
+        }
+
+        footer {
+            padding-top: 28px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 920px) {
+            .page {
+                width: min(100% - 28px, 760px);
+                padding-top: 20px;
+            }
+
+            .hero,
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero,
+            .section {
+                padding: 24px;
+            }
+
+            .shot-grid.two {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .meta-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            h2 {
+                align-items: flex-start;
+                font-size: 21px;
+            }
+
+            .toc-links {
+                display: grid;
+            }
+
+            .caption {
+                display: grid;
+                justify-content: stretch;
+            }
+
+            .image-action {
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero" aria-labelledby="page-title">
+            <div>
+                <p class="eyebrow">X-Scraper 使用说明</p>
+                <h1 id="page-title">微信公众号采集助手操作指南</h1>
+                <p class="lead">本文介绍 X-Scraper 的核心页面与常用流程，帮助你完成本地服务启动、公众号接入、关键词采集、微信公众号文章采集、公众号文章评论采集、任务追踪和账号记录查看。工具采集的数据可通过本地后台管理，也可通过 MCP 服务接入本地智能体或自建业务系统。</p>
+            </div>
+
+            <aside class="hero-card" aria-label="快速信息">
+                <dl class="meta-list">
+                    <div class="meta-row">
+                        <dt>后台地址</dt>
+                        <dd><a href="http://127.0.0.1:8081/">http://127.0.0.1:8081/</a></dd>
+                    </div>
+                    <div class="meta-row">
+                        <dt>MCP 服务</dt>
+                        <dd>可接入本地智能体调用采集数据</dd>
+                    </div>
+                    <div class="meta-row">
+                        <dt>适用场景</dt>
+                        <dd>公众号文章管理、关键词采集、数据转发与本地分析</dd>
+                    </div>
+                </dl>
+            </aside>
+        </section>
+
+        <nav class="toc" aria-label="页面目录">
+            <div class="toc-title">页面目录</div>
+            <div class="toc-links">
+                <a href="#startup">启动服务</a>
+                <a href="#settings">全局设置</a>
+                <a href="#accounts">公众号管理</a>
+                <a href="#keywords">关键词采集</a>
+                <a href="#articles">公众号文章</a>
+                <a href="#tasks">任务管理</a>
+                <a href="#auth">鉴权账号</a>
+            </div>
+        </nav>
+
+        <section class="section" id="startup" aria-labelledby="startup-title">
+            <h2 id="startup-title"><span class="section-number">1</span>APP 启动服务</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>下载完成后，双击 <code>app.exe</code> 即可启动本地服务。启动成功后，浏览器访问 <a href="http://127.0.0.1:8081/">http://127.0.0.1:8081/</a>，输入账号密码即可登录后台。</p>
+                    <ul class="feature-list">
+                        <li>启动窗口会展示本地后台地址和 MCP 服务地址。</li>
+                        <li>后台用于管理公众号、采集文章、查看任务进度和调整系统配置。</li>
+                        <li>MCP 服务可集成到本地智能体中，让智能体直接调用已采集的文章数据。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/1.jpg" target="_blank" rel="noopener">
+                        <img src="/img/1.jpg" alt="APP 启动服务界面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">启动后可在窗口中查看服务地址</span>
+                        <a class="image-action" href="/img/1.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="settings" aria-labelledby="settings-title">
+            <h2 id="settings-title"><span class="section-number">2</span>全局设置说明</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>全局设置页面顶部会汇总当前 APP 的采集数据和运行状态，下方用于配置采集频率、VIP 自动能力和数据转发服务。</p>
+                    <ul class="feature-list">
+                        <li><strong>采集休眠时间：</strong>用于控制采集频率。每次请求接口后会按照设置值休眠，支持小数，例如 <code>0.5s</code>。</li>
+                        <li><strong>VIP 自动服务：</strong>开通后可配置每日增量采集和微信令牌自动续期。当前微信令牌通常约 30 分钟到期；在微信内置浏览器保持打开时，APP 可自动唤醒并完成续期，减少人工介入。</li>
+                        <li><strong>采集转发服务地址：</strong>用于把采集到的数据推送到自建业务系统。接收方 HTTP 接口处理成功后需要明确返回 <code>OK</code>，否则 APP 会按周期重试。</li>
+                    </ul>
+                </div>
+                <div class="shot-grid two">
+                    <figure>
+                        <a class="image-link" href="/img/2.jpg" target="_blank" rel="noopener">
+                            <img src="/img/2.jpg" alt="全局设置统计区域截图">
+                        </a>
+                        <figcaption class="caption">
+                            <span class="caption-text">运行统计与配置入口</span>
+                            <a class="image-action" href="/img/2.jpg" target="_blank" rel="noopener">查看原图</a>
+                        </figcaption>
+                    </figure>
+                    <figure>
+                        <a class="image-link" href="/img/3.jpg" target="_blank" rel="noopener">
+                            <img src="/img/3.jpg" alt="全局设置详情区域截图">
+                        </a>
+                        <figcaption class="caption">
+                            <span class="caption-text">采集频率与转发服务配置</span>
+                            <a class="image-action" href="/img/3.jpg" target="_blank" rel="noopener">查看原图</a>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="accounts" aria-labelledby="accounts-title">
+            <h2 id="accounts-title"><span class="section-number">3</span>公众号管理与新增公众号</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>首次启动时，公众号列表通常为空。你可以通过微信内置浏览器访问目标公众号文章，让系统识别并加入公众号管理列表。</p>
+                    <ul class="feature-list">
+                        <li>打开 PC 微信，进入目标公众号，任选一篇文章并在微信内置浏览器中打开，然后手动刷新页面。正常情况下，该公众号会出现在“公众号管理”中。</li>
+                        <li>如果需要添加的公众号较多，可先登录订阅号，再使用“批量导入公众号”功能批量导入。</li>
+                        <li>全量采集数据量较大时，请适当降低采集频率。微信端可能对账号限流；被限流后，可切换本地微信账号或等待限制解除。</li>
+                        <li>开启“重点关注”后，系统会定期检测目标公众号是否发布新文章。发现新内容并完成采集后，可通过已配置的 HTTP 接口通知业务系统。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/4.jpg" target="_blank" rel="noopener">
+                        <img src="/img/4.jpg" alt="公众号管理页面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">公众号管理、采集状态与重点关注配置</span>
+                        <a class="image-action" href="/img/4.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="keywords" aria-labelledby="keywords-title">
+            <h2 id="keywords-title"><span class="section-number">4</span>关键词采集管理</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>关键词采集用于按关键词检索公众号原创文章，该能力依赖公众号登录状态。通过关键词采集到的文章，部分字段可能需要后续补采才能完整展示。</p>
+                    <ul class="feature-list">
+                        <li>关键词采集适合快速发现与指定主题相关的公众号原创文章。</li>
+                        <li>采集列表默认可能不包含完整发布时间和正文详情。</li>
+                        <li>执行文章详情采集后，系统会自动补齐发布时间和内容详情字段。</li>
+                        <li>后续版本会继续优化关键词采集的稳定性和数据完整度。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/5.jpg" target="_blank" rel="noopener">
+                        <img src="/img/5.jpg" alt="关键词采集管理页面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">关键词采集任务与结果管理</span>
+                        <a class="image-action" href="/img/5.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="articles" aria-labelledby="articles-title">
+            <h2 id="articles-title"><span class="section-number">5</span>公众号文章</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>“公众号文章”页面会汇总公众号采集和关键词采集得到的所有文章。你可以在这里补采详情、更新统计数值，并继续管理文章数据。</p>
+                    <ul class="feature-list">
+                        <li>需要正文、发布时间等信息时，请先执行“详情采集”。</li>
+                        <li>需要评论数时，请先完成详情采集，再执行“转赞评采集”。</li>
+                        <li>转发、点赞、评论等统计数据的采集频率受全局设置影响；如果处理速度偏慢，可在全局设置中适当调整休眠时间。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/6.jpg" target="_blank" rel="noopener">
+                        <img src="/img/6.jpg" alt="公众号文章页面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">文章列表、详情采集与统计数据采集</span>
+                        <a class="image-action" href="/img/6.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="tasks" aria-labelledby="tasks-title">
+            <h2 id="tasks-title"><span class="section-number">6</span>任务管理</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>系统触发的采集任务会进入任务队列统一处理。任务管理页面用于查看每个任务的进度、状态和执行结果。</p>
+                    <ul class="feature-list">
+                        <li>可查看任务的执行状态、处理进度和返回结果。</li>
+                        <li>如果某个任务不再需要执行，可在页面中删除并清理。</li>
+                        <li>当采集量较大时，建议通过任务状态判断是否需要调整采集频率或拆分采集范围。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/8.jpg" target="_blank" rel="noopener">
+                        <img src="/img/8.jpg" alt="任务管理页面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">采集任务队列、进度与结果</span>
+                        <a class="image-action" href="/img/8.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="auth" aria-labelledby="auth-title">
+            <h2 id="auth-title"><span class="section-number">7</span>鉴权账号管理</h2>
+            <div class="content-grid">
+                <div class="text-block">
+                    <p>鉴权账号管理页面主要用于查看历史使用记录，不承担核心采集操作。你可以通过该页面了解当前 APP 曾使用哪些微信账号执行过操作。</p>
+                    <ul class="feature-list">
+                        <li>查看历史微信账号使用记录。</li>
+                        <li>根据需要手动删除或清理记录。</li>
+                        <li>该页面以记录查看为主，不影响核心采集流程。</li>
+                    </ul>
+                </div>
+                <figure>
+                    <a class="image-link" href="/img/7.jpg" target="_blank" rel="noopener">
+                        <img src="/img/7.jpg" alt="鉴权账号管理页面截图">
+                    </a>
+                    <figcaption class="caption">
+                        <span class="caption-text">历史鉴权账号记录</span>
+                        <a class="image-action" href="/img/7.jpg" target="_blank" rel="noopener">查看原图</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <aside class="note">
+            <h3>使用提醒</h3>
+            <p>进行全量采集或高频采集时，请根据账号状态和业务需要合理设置采集频率。若需要把数据接入自建系统，请先确认转发接口能够稳定返回 <code>OK</code>，避免重复重试造成额外压力。</p>
+        </aside>
+
+        <footer>
+            X-Scraper 使用说明 · 本地后台与 MCP 服务均运行在用户本机
+        </footer>
+    </main>
+</body>
+</html>

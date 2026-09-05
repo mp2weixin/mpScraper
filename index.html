@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>X-Scraper 运营助手</title>
+    <meta name="keywords" content="X-Scraper,公众号采集,公众号助手,公众号运营,数据采集">
+    <meta name="description" content="X-Scraper 是一款本地化轻量级的数据采集助手，易于集成到业务系统或智能体当中。">
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --panel: #ffffff;
+            --ink: #1f2937;
+            --muted: #64748b;
+            --line: #dbe3ee;
+            --brand: #1769aa;
+            --brand-dark: #0f4e82;
+            --accent: #12a594;
+            --warm: #f59e0b;
+            --danger: #dc2626;
+            --code-bg: #111827;
+            --shadow: 0 16px 44px rgba(31, 41, 55, .10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+            line-height: 1.7;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(18, 165, 148, .12), transparent 28rem),
+                radial-gradient(circle at 88% 12%, rgba(245, 158, 11, .16), transparent 24rem),
+                var(--bg);
+        }
+
+        a {
+            color: var(--brand);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--brand-dark);
+            text-decoration: underline;
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 40px 0 64px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
+            gap: 28px;
+            align-items: stretch;
+            margin-bottom: 28px;
+        }
+
+        .hero-main,
+        .quick-panel,
+        .section,
+        .notice {
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid rgba(219, 227, 238, .92);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-main {
+            min-height: 360px;
+            padding: 48px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-main::after {
+            content: "";
+            position: absolute;
+            inset: auto -90px -110px auto;
+            width: 260px;
+            height: 260px;
+            border: 42px solid rgba(23, 105, 170, .10);
+            border-radius: 50%;
+        }
+
+        .eyebrow {
+            width: fit-content;
+            margin: 0 0 16px;
+            padding: 4px 10px;
+            color: var(--brand-dark);
+            font-size: 13px;
+            font-weight: 700;
+            background: #e8f2fb;
+            border: 1px solid #cde3f7;
+            border-radius: 999px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin: 0;
+            line-height: 1.25;
+            letter-spacing: 0;
+        }
+
+        h1 {
+            max-width: 12em;
+            font-size: clamp(34px, 6vw, 64px);
+        }
+
+        h2 {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+            font-size: 24px;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .lead {
+            max-width: 680px;
+            margin: 22px 0 0;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 8px 16px;
+            border: 1px solid var(--brand);
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .button.primary {
+            color: #fff;
+            background: var(--brand);
+        }
+
+        .button.secondary {
+            color: var(--brand);
+            background: #fff;
+        }
+
+        .quick-panel {
+            padding: 28px;
+            border-radius: 8px;
+        }
+
+        .quick-panel h2 {
+            margin-bottom: 16px;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 88px minmax(0, 1fr);
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .info-row:last-child {
+            border-bottom: 0;
+        }
+
+        .info-row dt {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .info-row dd {
+            margin: 0;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .section {
+            margin-top: 18px;
+            padding: 32px;
+            border-radius: 8px;
+        }
+
+        .section-number {
+            display: inline-grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            flex: 0 0 auto;
+            color: #fff;
+            font-size: 15px;
+            background: var(--brand);
+            border-radius: 50%;
+        }
+
+        .steps {
+            display: grid;
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps li {
+            position: relative;
+            padding: 16px 18px 16px 54px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            top: 16px;
+            left: 18px;
+            display: grid;
+            width: 24px;
+            height: 24px;
+            place-items: center;
+            color: var(--brand-dark);
+            font-size: 13px;
+            font-weight: 800;
+            background: #dff1ff;
+            border-radius: 50%;
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .callout {
+            padding: 18px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+        }
+
+        .callout p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .command {
+            margin: 14px 0 0;
+            padding: 14px 16px;
+            color: #e5e7eb;
+            font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: var(--code-bg);
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .table-wrap {
+            width: 100%;
+            margin-top: 12px;
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 720px;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--brand-dark);
+            font-size: 14px;
+            background: #eef6fd;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        code {
+            padding: 2px 6px;
+            color: #0f4e82;
+            background: #edf6ff;
+            border-radius: 4px;
+            font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+            font-size: .94em;
+        }
+
+        .prompt-box {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .prompt {
+            padding: 16px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .prompt strong {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--brand-dark);
+        }
+
+        .notice {
+            margin-top: 18px;
+            padding: 24px 28px;
+            border-left: 5px solid var(--danger);
+            border-radius: 8px;
+        }
+
+        .notice h2 {
+            margin-bottom: 10px;
+            color: var(--danger);
+        }
+
+        p {
+            margin: 0 0 14px;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            padding: 28px 0 0;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 860px) {
+            .page {
+                width: min(100% - 28px, 720px);
+                padding-top: 20px;
+            }
+
+            .hero,
+            .split {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-main,
+            .quick-panel,
+            .section {
+                padding: 24px;
+            }
+
+            .hero-main {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .hero-actions {
+                display: grid;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            h2 {
+                align-items: flex-start;
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero" aria-labelledby="page-title">
+            <div class="hero-main">
+                <p class="eyebrow">本地化 · 公众号采集 · MCP 接入</p>
+                <h1 id="page-title">X-Scraper 运营助手</h1>
+                <p class="lead">微信公众号文章/评论/关键词采集工具，仅用于采集技术学习、研究及合法合规的数据处理场景。数据默认存储在用户本地 <code>data/</code> 目录，可用于业务系统或智能体的资料分析流程。默认使用sqlite数据库存储，如要升级PGSQL或者MYSQL存储请联系QQ,有使用上的疑问请加QQ:<code>3887037693</code></p>
+                <div class="hero-actions" aria-label="快速入口">
+                    <a class="button primary" href="http://127.0.0.1:8081">打开本地后台</a>
+                    <a class="button secondary" href="/readme.html">查看帮助文档</a>
+                    <a class="button primary" href="/app.exe">下载 试用</a>
+                    
+                </div>
+            </div>
+
+            <aside class="quick-panel" aria-labelledby="quick-title">
+                <h2 id="quick-title">启动信息</h2>
+                <dl class="info-list">
+                    <div class="info-row">
+                        <dt>访问地址</dt>
+                        <dd><a href="http://127.0.0.1:8081">http://127.0.0.1:8081</a></dd>
+                    </div>
+                    <div class="info-row">
+                        <dt>登录账号</dt>
+                        <dd>admin</dd>
+                    </div>
+                    <div class="info-row">
+                        <dt>登录密码</dt>
+                        <dd>mp@173</dd>
+                    </div>
+                    <div class="info-row">
+                        <dt>MCP 地址</dt>
+                        <dd><a href="http://127.0.0.1:8082/mcp">http://127.0.0.1:8082/mcp</a></dd>
+                    </div>
+                </dl>
+            </aside>
+        </section>
+
+        <section class="section" aria-labelledby="start-title">
+            <h2 id="start-title"><span class="section-number">1</span>启动本地采集应用</h2>
+            <ol class="steps">
+                <li>双击 <code>app.exe</code> 启动本地微信公众号采集应用。</li>
+                <li>如果应用启动失败，可手动点击 <code>ca-cert.p12</code> 安装代理 HTTPS 证书。</li>
+                <li>如果启动界面显示 <code>http server { http://127.0.0.1:8081 }</code>，说明服务已正常运行，可在浏览器打开访问地址。</li>
+                <li>打开后台后输入账号和密码登录，即可进入采集管理界面。</li>
+            </ol>
+            <div class="prompt-box">
+                <div class="prompt">
+                    <strong>文章列表查询提示词示例</strong>
+                    调用文章列表工具函数，查询“本地生活”等 3 个公众号最近一周的数据，筛选包含指定关键词的文章，并按发布时间、阅读数、点赞数或评论数排序。
+                </div>
+                <div class="prompt">
+                    <strong>文章详情查询提示词示例</strong>
+                    帮我查找 <code>id=1</code> 的文章内容。这里的 <code>id</code> 来自文章列表接口返回的数据。
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="collect-title">
+            <h2 id="collect-title"><span class="section-number">2</span>提取要采集的公众号文章</h2>
+            <ol class="steps">
+                <li>打开 PC 微信，访问需要采集的公众号，任选一篇文章打开，并手动刷新微信内置浏览器。</li>
+                <li>访问 <a href="http://127.0.0.1:8081/#/mp-user">公众号管理页面</a>，正常情况下会出现对应公众号信息。</li>
+                <li>进入“公众号管理”标签页，可继续执行增量采集、全量采集或自定义时间段采集。</li>
+                <li>文章采集完成后，进入“公众号文章”标签页，配置文章详情、转发、点赞、评论等后续采集任务。</li>
+            </ol>
+        </section>
+
+        <section class="section" aria-labelledby="import-title">
+            <h2 id="import-title"><span class="section-number">3</span>批量导入公众号</h2>
+            <ol class="steps">
+                <li>如果已知公众号名称，并且已经登录订阅号，可手动批量导入要采集的公众号。</li>
+                <li>导入后复制公众号链接，在微信内打开链接，任选一篇文章打开，并刷新微信内置浏览器。</li>
+                <li>当“公众号管理”标签页中的心跳状态显示为“可用”时，表示该公众号可以发起采集。</li>
+                <li>如果状态过期，可点击“续期”按钮，系统会通过自动化 RPA 流程续期，状态恢复后即可继续使用。</li>
+            </ol>
+        </section>
+
+        <section class="section" aria-labelledby="manage-title">
+            <h2 id="manage-title"><span class="section-number">4</span>任务与中台分析</h2>
+            <div class="split">
+                <div class="callout">
+                    <h3>任务管理</h3>
+                    <p>在“任务管理”标签页中查看历史采集操作记录，便于追踪每次采集任务的执行情况。</p>
+                </div>
+                <div class="callout">
+                    <h3>中台分析</h3>
+                    <p>中台分析页面上半部分展示系统运行状态，下半部分展示当前系统配置。</p>
+                </div>
+            </div>
+            <ol class="steps" style="margin-top: 16px;">
+                <li>如果暂时不采集，可点击“关闭代理”，让工具与微信 PC 断开连接；再次使用前请重新开启代理服务。</li>
+                <li>签名默认有效期为 1 小时。如需继续使用，请联系 QQ。</li>
+            </ol>
+        </section>
+
+        <section class="section" aria-labelledby="renew-title">
+            <h2 id="renew-title"><span class="section-number">5</span>开启签名自动续期/模拟采集</h2>
+            <p>采集依赖微信登录令牌，默认有效期为 30 分钟。开启自动续期后，系统会在检测到即将到期时自动执行续期流程。</p>
+            <ol class="steps">
+                <li>本地安装 Python，建议使用 Python 3.12，并在安装时勾选“将 Python 加入 PATH 环境变量”。</li>
+                <li>在命令行中安装脚本依赖包，可使用清华大学 Python 镜像源加速安装。</li>
+                <li>依赖安装完成后，重启应用：关闭命令行窗口，再双击 <code>app.exe</code> 重新打开。</li>
+                <li>模拟采集依赖这几个插件，强烈建议安装上这个，这样如果接口被限流可以通过使用这个方式采集.</li>
+            </ol>
+            <pre class="command">pip install uiautomation pyperclip pyautogui -i https://pypi.tuna.tsinghua.edu.cn/simple</pre>
+        </section>
+
+        <section class="section" aria-labelledby="mcp-title">
+            <h2 id="mcp-title"><span class="section-number">6</span>关键词监控与 MCP 服务</h2>
+            <p>系统支持关键词词库管理，可基于关键词批量采集或增量采集公众号推文。同时提供 MCP 接口服务，便于本地智能体调用文章数据进行初步资料分析。</p>
+
+            <h3>MCP：查询公众号文章列表</h3>
+            <p>取到文章列表后，可根据返回的 <code>id</code> 查询详情。列表查询支持以下参数：</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>参数</th>
+                            <th>说明</th>
+                            <th>示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>公众号名称数组</td>
+                            <td>指定需要查询的公众号。</td>
+                            <td><code>['本地生活', '中药指南']</code></td>
+                        </tr>
+                        <tr>
+                            <td>关键词数组</td>
+                            <td>指定文章需要包含的关键词。</td>
+                            <td><code>['GLP-1', '肥胖']</code></td>
+                        </tr>
+                        <tr>
+                            <td>日期限制</td>
+                            <td>查询指定日期之前或指定范围内的文章。</td>
+                            <td><code>2006-01-01</code></td>
+                        </tr>
+                        <tr>
+                            <td>排序字段</td>
+                            <td>默认按发布时间 <code>created_at</code> 降序，也可按阅读、点赞或评论数排序。</td>
+                            <td><code>read_num</code>、<code>old_like_num</code>、<code>comment_count</code></td>
+                        </tr>
+                        <tr>
+                            <td>返回数量</td>
+                            <td>设置本次抓取返回的文章列表数量。</td>
+                            <td><code>20</code></td>
+                        </tr>
+                        <tr>
+                            <td>偏移量</td>
+                            <td>设置当前获取记录的偏移量，默认从 <code>0</code> 开始。</td>
+                            <td><code>0</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top: 22px;">MCP：查询公众号文章详情</h3>
+            <p>告诉智能体需要查询的文章数值编号，即可返回 Markdown 格式的文章详情。</p>
+        </section>
+
+        <section class="notice" aria-labelledby="disclaimer-title">
+            <h2 id="disclaimer-title">重要声明</h2>
+            <p>本软件（以下简称“本工具”）仅供学习、研究及合法合规的数据采集用途开发。使用者应自行确保采集行为符合相关法律法规、平台规则与数据合规要求。</p>
+        </section>
+
+        <footer>
+            X-Scraper 运营助手 · 本地数据默认存储于 <code>data/</code> 目录
+        </footer>
+    </main>
+</body>
+</html>
