@@ -1,0 +1,1 @@
+2026-08-27 11:58:23.706 <string>[30] open_wechat_url -> Can not move cursor. EditControl's BoundingRectangle is (0,0,0,0)[0x0]. SearchProperties: {ClassName: 'OmniboxViewViews', ControlType: EditControl}
