@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户隐私协议 · X-scraper爬虫软件</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f5f7fb;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 30px 20px;
+      color: #1e293b;
+    }
+    .card {
+      max-width: 1000px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.02);
+      padding: 45px 50px;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(2px);
+    }
+    @media (max-width: 640px) {
+      .card {
+        padding: 28px 22px;
+        border-radius: 28px;
+      }
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+    h1 small {
+      font-size: 16px;
+      font-weight: 400;
+      color: #64748b;
+      margin-left: auto;
+      background: #f1f5f9;
+      padding: 4px 14px;
+      border-radius: 40px;
+      letter-spacing: 0.2px;
+    }
+    .subhead {
+      font-size: 15px;
+      color: #475569;
+      border-left: 4px solid #94a3b8;
+      padding-left: 18px;
+      margin-top: 4px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+      background: #f8fafc;
+      padding: 14px 20px;
+      border-radius: 16px;
+      border-left: 4px solid #3b82f6;
+    }
+    .section {
+      margin-top: 32px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #eef2f6;
+      padding-bottom: 10px;
+    }
+    .section-title span {
+      background: #3b82f6;
+      color: white;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .section p {
+      line-height: 1.7;
+      margin: 16px 0;
+      color: #1e293b;
+    }
+    .section ul, .section ol {
+      padding-left: 26px;
+      margin: 16px 0 20px 0;
+    }
+    .section li {
+      margin: 10px 0;
+      line-height: 1.6;
+      color: #1e293b;
+    }
+    .section li strong {
+      color: #0f172a;
+      font-weight: 600;
+    }
+    .badge-local {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 2px 14px;
+      border-radius: 30px;
+      margin-right: 6px;
+    }
+    .highlight-box {
+      background: #f1f5f9;
+      padding: 18px 24px;
+      border-radius: 20px;
+      margin: 22px 0;
+      border: 1px solid #e2e8f0;
+    }
+    .highlight-box p {
+      margin: 6px 0;
+    }
+    .footer-note {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-note a {
+      color: #2563eb;
+      text-decoration: none;
+      border-bottom: 1px dotted #94a3b8;
+    }
+    .footer-note a:hover {
+      color: #1d4ed8;
+      border-bottom: 1px solid #2563eb;
+    }
+    .legal-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      padding: 2px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>
+      📋 用户隐私协议
+      <small>X-scraper爬虫软件 · v1.0</small>
+    </h1>
+    <div class="subhead">
+      ⚡ 独立部署 · 客户端本地存储 (SQLite) · 数据不上传
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>1</span> 总则与承诺</div>
+      <p>本软件（以下简称“本应用”）是一款<strong>独立部署在客户端电脑</strong>的爬虫工具，所有数据默认存储在本地 <strong>SQLite 数据库</strong>中。开发者郑重承诺：</p>
+      <ul>
+        <li><strong>绝不主动收集</strong> 您的个人身份信息（如姓名、身份证号、手机号、邮箱等）。</li>
+        <li><strong>绝不联网上传</strong> 任何爬取或本地产生的数据，所有数据仅保存在您指定的本地目录。</li>
+        <li>本应用 <strong>无需注册、无需登录</strong>，不依赖任何云端服务，完全离线运行（软件更新除外）。</li>
+      </ul>
+      <div class="highlight-box">
+        <p>✅ <strong>本地优先</strong> — 您的数据、配置、日志全部存储在您的电脑上，开发者无法访问。</p>
+        <p>✅ <strong>透明可控</strong> — 您可随时通过 SQLite 工具查看、备份或删除本地数据库文件。</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>2</span> 我们收集哪些信息</div>
+      <p>由于本应用为 <strong>纯客户端工具</strong>，我们 <strong>不会主动收集</strong> 任何用户个人信息。但在使用过程中，以下信息可能被存储在本地：</p>
+      <ul>
+        <li><strong>爬虫任务配置</strong>：您手动输入的爬取目标 URL、选择器、定时规则等（仅保存在本地配置文件中）。</li>
+        <li><strong>爬取结果数据</strong>：您所爬取的公开网页数据（如文本、图片链接等），均存储在本地 SQLite 数据库。</li>
+        <li><strong>本地日志记录</strong>：软件运行日志（如请求状态、错误信息），用于辅助排查问题，<strong>不会自动上报</strong>。</li>
+      </ul>
+      <p><span class="badge-local">🔒 本地存储</span> 所有数据均以明文或 SQLite 格式保存在您电脑的指定目录，您拥有完全的控制权。</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>3</span> 数据使用与共享</div>
+      <p>本应用 <strong>不会以任何形式</strong> 向第三方共享、出售或传输您的数据。具体而言：</p>
+      <ul>
+        <li><strong>无云端同步</strong> — 数据仅在本地，无服务器参与。</li>
+        <li><strong>无广告追踪</strong> — 不集成任何广告 SDK 或分析工具。</li>
+        <li><strong>无用户画像</strong> — 不分析您的使用行为。</li>
+        <li>您爬取的数据 <strong>完全属于您自己</strong>，开发者不主张任何权利。</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>4</span> 数据安全与存储</div>
+      <p>我们重视数据安全，但由于软件在本地运行，安全性依赖于您的操作系统和电脑环境。建议您：</p>
+      <ul>
+        <li>定期备份 <code>data.db</code> (SQLite 文件) 及配置文件。</li>
+        <li>使用操作系统自带的文件加密功能（如 BitLocker、FileVault）保护存储目录。</li>
+        <li>本应用不包含任何远程控制或后门代码，<strong>源代码透明</strong>（若您获取的是开源版本）。</li>
+      </ul>
+      <div class="highlight-box">
+        <p>📁 <strong>默认存储路径</strong>：<code>./data/</code> (软件运行目录下) ，您可以在设置中更改。</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>5</span> 您的权利</div>
+      <p>您对本地数据拥有全部权利，包括：</p>
+      <ul>
+        <li><strong>访问</strong> — 使用 SQLite 浏览器或本应用导出功能查看数据。</li>
+        <li><strong>修改</strong> — 直接编辑数据库或通过软件界面修改配置。</li>
+        <li><strong>删除</strong> — 删除数据库文件或通过软件“清空数据”功能移除所有记录。</li>
+        <li><strong>拒绝</strong> — 您完全可以选择不使用本软件，但一旦使用，即表示您理解并接受本协议。</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>6</span> 隐私协议更新</div>
+      <p>本隐私协议可能会根据软件功能更新或法律法规要求进行调整。更新后的版本将在软件安装包或官方网站发布。您继续使用本应用即表示您接受修订后的协议。</p>
+      <p><strong>重要提示</strong>：本协议自 2026 年 09 月 06 日起生效，取代此前所有版本。</p>
+    </div>
+
+    <div class="footer-note">
+      <span>📌 本协议适用于爬虫软件所有版本（v1.0+）</span>
+      <span class="legal-badge">独立开发者 · 客户端部署</span>
+    </div>
+  </div>
+</body>
+</html>
